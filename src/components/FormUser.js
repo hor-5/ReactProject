@@ -7,9 +7,11 @@ import {
     Input,
     Button,
     Select,
-    useToast,    
+    useToast,
 } from '@chakra-ui/react'
 import { GlobalContext } from '../context/GlobalContext'
+import axios from 'axios'
+
 
 
 export default function FormUser(props) {
@@ -19,43 +21,77 @@ export default function FormUser(props) {
         register,
         formState: { errors, isSubmitting },
     } = useForm()
-    
-        const toast = useToast()
-         const showToast = ()=>{
-              toast({
-                title: 'Operation completed.',
-                description: props.isEdit? 'User updated.' : 'User created.',
-                status: 'success',
-                duration: 2000,
-                isClosable: true,
-              })}
+
+    const toast = useToast()
+    const showToast = () => {
+        toast({
+            title: 'Operation completed.',
+            description: props.isEdit ? 'User updated.' : 'User created.',
+            status: 'success',
+            duration: 2000,
+            isClosable: true,
+        })
+    }
 
     function onSubmit(values) {
         return new Promise((resolve) => {
-            setTimeout(() => {                
+            setTimeout(() => {
                 showToast();
-                resolve();                
-                props.isEdit?context.updateUser(values) : context.createUser(values);          
+                resolve();
+                props.isEdit ? updateUser(values) : createUser(values);
+                props.onClose();
+                this.forceUpdate();                
             }, 3000)
         })
+    }
+
+    const createUser = (user) => {
+        axios.post(context.urlUsers + '?'
+            + 'name=' + user.name
+            + '&email=' + user.email
+            + '&gender=' + user.gender
+            + '&status=' + user.status
+            + '&' + context.apiKey)
+            .then(
+                response => {
+                    //console.log(response.data);                                                          
+                    props.setUsers(oldUsers => [...oldUsers, response.data]);
+                }
+            )
+    }
+
+    const updateUser = (user) => {
+        axios.patch(context.urlUsers + '/' + user.pk + '?'
+            + 'name=' + user.name
+            + '&email=' + user.email
+            + '&gender=' + user.gender
+            + '&status=' + user.status
+            + '&' + context.apiKey)
+
+            .then(
+                response => {
+                    //console.log(response.data);
+                    props.setUsers(oldUsers => [...oldUsers, response.data]);
+                }
+            )
     }
 
 
     return (
 
         <form onSubmit={handleSubmit(onSubmit)}>
-            {props.isEdit && 
-            <FormControl isInvalid={errors.pk}>
-                <FormLabel htmlFor='pk'>ID</FormLabel>
-                <Input id='pk'  
-                     name='pk' 
-                     value={props.id}
-                     readOnly
-                     {...register('pk', {
-                        required: 'ID is required'                        
-                    })}
-                     />
-            </FormControl>
+            {props.isEdit &&
+                <FormControl isInvalid={errors.pk}>
+                    <FormLabel htmlFor='pk'>ID</FormLabel>
+                    <Input id='pk'
+                        name='pk'
+                        value={props.id}
+                        readOnly
+                        {...register('pk', {
+                            required: 'ID is required'
+                        })}
+                    />
+                </FormControl>
             }
             <FormControl isInvalid={errors.name}>
                 <FormLabel htmlFor='name'>First name</FormLabel>
@@ -79,7 +115,7 @@ export default function FormUser(props) {
                     placeholder='johndoe@gmail.com'
                     defaultValue={props.email}
                     {...register('email', {
-                        required: 'Email is required'                        
+                        required: 'Email is required'
                     })}
                 />
                 <FormErrorMessage>
@@ -93,7 +129,7 @@ export default function FormUser(props) {
                         required: 'Gender is required'
                     })}>
                     <option value='male'>Male</option>
-                    <option value='female'>Female</option>                    
+                    <option value='female'>Female</option>
                 </Select>
                 <FormErrorMessage>
                     {errors.gender && errors.gender.message}
@@ -112,14 +148,15 @@ export default function FormUser(props) {
                     {errors.status && errors.status.message}
                 </FormErrorMessage>
             </FormControl>
-            
-                <Button mt={4} colorScheme='blue'
-                    isLoading={isSubmitting} type='submit'
-                    rounded={'full'}
-                >
-                    Submit
-                </Button>
-            
+
+            <Button mt={4} colorScheme='blue'
+                isLoading={isSubmitting} type='submit'
+                rounded={'full'}
+                
+            >
+                Submit
+            </Button>
+
         </form>
     )
 }

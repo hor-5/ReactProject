@@ -46,8 +46,8 @@ export default function DrawerCreateorEditUser(props) {
         >
         Create user
       </Button>
-    }
-
+    } 
+    
     return (
       <>
       <RenderButton />             
@@ -66,10 +66,12 @@ export default function DrawerCreateorEditUser(props) {
 
             <DrawerBody>
               <Stack spacing='24px'>
-                <FormUser id={props.id} name={props.name} 
+                <FormUser users={props.users} setUsers={props.setUsers}
+                          getUsers={props.getUsers}
+                          id={props.id} name={props.name} 
                           email={props.email} gender={props.gender}
-                          status={props.status} isEdit={isEdit()}
-                          />
+                          status={props.status} isEdit={isEdit()}                                                   
+                          onClose={onClose}/>
               </Stack>
             </DrawerBody>
 

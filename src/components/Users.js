@@ -10,12 +10,14 @@ import {
 
 } from '@chakra-ui/react'
 import { Icon } from '@chakra-ui/icons'
+import axios from 'axios'
 const CardUser = lazy(()=>import('./CardUser'))
+
 
 
 export default function Users() {
   const context = useContext(GlobalContext)
-
+  const [users, setUsers] = useState([{}])
   const CircleIcon = (props) => (
     <Icon viewBox='0 0 200 200' {...props}>
       <path
@@ -24,14 +26,29 @@ export default function Users() {
       />
     </Icon>
   )
+
+  const getUsers = () => {
+    axios.get(context.urlUsers + '?' + context.apiKey)
+      .then(
+        response => {
+          //console.log(response.data);
+          setUsers(response.data);                      
+        }
+      )
+  }
+  useEffect(() => {
+    async function fetchUsers() {
+      const response = await getUsers();
+    }      
+    fetchUsers();      
+  }, [])
   
 
 
   return (
     <>
-
-      <SimpleGrid columns={2} spacing={8} margin={2}>
-        <Heading centerContent paddingLeft={5} >
+        <SimpleGrid columns={2} spacing={8} margin={2}>
+        <Heading  paddingLeft={5} >
           Registered users
           <HStack>
             <CircleIcon />
@@ -39,12 +56,13 @@ export default function Users() {
             <CircleIcon boxSize={8} color='blue.500' />
           </HStack>
         </Heading>
-        <DrawerCreateorEditUser />
+        <DrawerCreateorEditUser  users={users} setUsers={setUsers} 
+                                 getUsers={getUsers} />
 
       </SimpleGrid>
 
-      <SimpleGrid columns={[2, null, 3]} spacing='40px' centerContent>
-        {context.users.map(user => ( 
+      <SimpleGrid columns={[2, null, 3]} spacing='40px' >
+        {users.map(user => ( 
           <Suspense fallback={<SkeletonCardUser/>}>    
             <CardUser id={user.id} name={user.name} 
                       email={user.email} gender={user.gender} 
