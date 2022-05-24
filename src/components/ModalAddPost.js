@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React,{useRef} from 'react'
 import { 
     useDisclosure,
     Modal,
@@ -18,8 +18,8 @@ import FormPost from './FormPost'
 export default function ModalAddPost(props) {   
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const initialRef = React.useRef()
-    const finalRef = React.useRef()
+    const initialRef = useRef()
+    const finalRef = useRef()
    
 
 
