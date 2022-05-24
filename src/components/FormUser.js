@@ -16,6 +16,11 @@ import axios from 'axios'
 
 export default function FormUser(props) {
     const context = useContext(GlobalContext);
+
+    //auxiliar ya que no actualiza al cambiar el estado 
+    const refreshPage = ()=>{
+        window.location.reload();
+     }
     
     const {
         handleSubmit,
@@ -55,7 +60,8 @@ export default function FormUser(props) {
             .then(
                 response => {
                     //console.log(response.data);                                                          
-                    props.setUsers(oldUsers => [...oldUsers, response.data]);
+                    /*props.setUsers(oldUsers => [...oldUsers, response.data]);*/
+                    refreshPage()
                 }
             )
     }
@@ -71,7 +77,8 @@ export default function FormUser(props) {
             .then(
                 response => {
                     //console.log(response.data);
-                    props.setUsers(oldUsers => [...oldUsers, response.data]);
+                    /*props.setUsers(oldUsers => [...oldUsers, response.data]);*/
+                    refreshPage()
                 }
             )
     }
