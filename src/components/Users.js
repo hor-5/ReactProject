@@ -62,7 +62,7 @@ export default function Users() {
 
       </SimpleGrid>
 
-      <SimpleGrid columns={[2, null, 3]} spacing='40px' >
+      <SimpleGrid columns={[2, null, 3]} spacing='40px' key={888}>
         {users.map(user => ( 
           <Suspense key={(user.id)+2} fallback={<SkeletonCardUser/>}>    
             <CardUser key={user.id} id={user.id} name={user.name} 

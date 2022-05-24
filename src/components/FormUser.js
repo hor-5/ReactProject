@@ -40,8 +40,7 @@ export default function FormUser(props) {
                 showToast();
                 resolve();
                 props.isEdit ? updateUser(values) : createUser(values);
-                props.onClose();
-                this.forceUpdate();                
+                props.onClose();                             
             }, 3000)
         })
     }
