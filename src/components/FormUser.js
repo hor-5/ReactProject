@@ -16,6 +16,7 @@ import axios from 'axios'
 
 export default function FormUser(props) {
     const context = useContext(GlobalContext);
+    
     const {
         handleSubmit,
         register,

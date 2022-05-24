@@ -73,7 +73,7 @@ export default function Posts(props) {
                             :
                             (
                                 posts.map(post => (
-                                    <CardPost id_post={post.id} title={post.title} body={post.body}/>            
+                                    <CardPost key={post.id} id_post={post.id} title={post.title} body={post.body}/>            
                                 ))  
                             )
                         }                        

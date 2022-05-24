@@ -56,6 +56,7 @@ export default function Users() {
             <CircleIcon boxSize={8} color='blue.500' />
           </HStack>
         </Heading>
+
         <DrawerCreateorEditUser  users={users} setUsers={setUsers} 
                                  getUsers={getUsers} />
 
@@ -63,8 +64,8 @@ export default function Users() {
 
       <SimpleGrid columns={[2, null, 3]} spacing='40px' >
         {users.map(user => ( 
-          <Suspense fallback={<SkeletonCardUser/>}>    
-            <CardUser id={user.id} name={user.name} 
+          <Suspense key={(user.id)+2} fallback={<SkeletonCardUser/>}>    
+            <CardUser key={user.id} id={user.id} name={user.name} 
                       email={user.email} gender={user.gender} 
                       status={user.status} />
           </Suspense>  
